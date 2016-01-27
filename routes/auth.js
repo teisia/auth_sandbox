@@ -11,6 +11,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/signin', function(req, res, next) {
+  res.cookie('user', req.body.email)
+  res.cookie('password', req.body.password)
   if (req.cookies.user) {
     res.render("auth/yougood")
   } else {
