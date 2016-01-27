@@ -9,19 +9,24 @@ function Users(){
 }
 
 router.post('/', function(req, res, next) {
-  Users().insert(req.body).then(function(val){
+  var crypted = bcrypt.hashSync(req.body.password, 8);
+  Users().insert({email: req.body.email, password: crypted}).then(function(val){
+    res.cookie('user', req.body.email)
     res.redirect("/tickets");
   });
 });
 
 router.post('/login', function(req, res, next) {
-  res.cookie('user', req.body.email)
-  res.cookie('password', req.body.password)
-    Users().where({email: req.body.email, password: req.body.password}).first().then(function(found){
+  Users().where({email: req.body.email}).first().then(function(found){
        if (found){
-         res.redirect("/tickets");
-       } else {
-         res.redirect("/no_auth");
+         if (bcrypt.compareSync(req.body.password, found.password)){
+           res.cookie('user', req.body.email)
+           res.redirect("/tickets");
+          } else {
+            res.redirect("/no_auth");
+          }
+          } else {
+            res.redirect("no_auth");
        }
     })
 });
