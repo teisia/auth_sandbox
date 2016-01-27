@@ -15,6 +15,8 @@ router.post('/', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
+  res.cookie('user', req.body.email)
+  res.cookie('password', req.body.password)
     Users().where({email: req.body.email, password: req.body.password}).first().then(function(found){
        if (found){
          res.redirect("/tickets");
