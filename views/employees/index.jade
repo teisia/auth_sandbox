@@ -11,17 +11,19 @@ block content
        tr
          th Employees id
          th Employee Name
-         th Group
+         th Team
          th
      tbody
-       for employee in employees
+       for person in people
          tr
            td
-             a(href='/employees/#{employee.id}/edit') #{employee.id}
-           td= employee.name
-           td= group
+             a(href='#')
+           td= person.name
            td
-            a(href='/employees/#{employee.id}/delete') delete
+              for team in person.teams
+                p= team
+           td
+            a(href='#') delete
 
 
    div
